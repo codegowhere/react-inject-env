@@ -1,0 +1,8 @@
+node_modules
+dist
+.idea
+
+# src/**/*.js
+package-lock.json
+yarn-error.log
+coverage
