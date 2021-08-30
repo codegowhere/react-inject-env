@@ -1,3 +1,13 @@
+# Usage
+
+`<npx react-inject-env <build folder>`
+
+Example:
+
+`npx react-inject-env build`
+
+## 
+
 # Testing
 
 ## Link module
