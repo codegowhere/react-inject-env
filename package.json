@@ -1,34 +1,38 @@
 {
   "name": "react-inject-env",
-  "version": "0.0.1",
-  "description": "Template for NPX packages",
+  "version": "0.0.0-next.3",
+  "description": "Tool to inject environment variables into your React build",
   "author": "aelesia",
   "license": "MIT",
-  "repository": "https://github.com/aelesia/npx-template",
+  "repository": "https://github.com/aelesia/npx-react-inject-env",
   "bin": "dist/index.js",
   "scripts": {
-    "prepublish": "tsc --incremental false",
+    "prepublish": "tsc --build --clean --incremental false",
     "compile": "tsc --noEmit && eslint src/**/*.ts tests/**/*.ts index.ts",
     "test": "jest",
     "test_coverage": "jest --collectCoverage",
     "lint": "eslint src/**/*.ts tests/**/*.ts index.ts --fix"
   },
   "dependencies": {
-    "replace-in-file": "^6.2.0"
+    "@aelesia/commons": "^0.5.0",
+    "@rushstack/ts-command-line": "^4.9.0",
+    "replace-in-file": "^6.2.0",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^13.1.4",
+    "@types/shelljs": "^0.8.9",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "dotenv": "^8.2.0",
+    "dotenv-cli": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.7.4",
-    "dotenv": "^8.2.0",
-    "dotenv-cli": "^4.0.0"
+    "typescript": "^3.7.4"
   }
 }

@@ -1,8 +1,11 @@
 import replace from 'replace-in-file'
+import shell from 'shelljs'
+import { Cfg } from '../app/Config'
+import { retrieveDotEnvCfg, retrieveReactEnvCfg } from './Utils'
 
 function generateFromTo(
   envCfg: Record<string, string>,
-  prefix = ['REACT_APP_', 'REPLACE_']
+  prefix = [Cfg.PREFIX, Cfg.PLACEHOLDER]
 ): {
   from: string[] | RegExp[];
   to: string[];
@@ -17,7 +20,12 @@ function generateFromTo(
   }
 }
 
-function replaceFile(dirPath: string, envConfig: Record<string, string>) {
+export function copyFolder(dir: string, copyDir: string): string {
+  shell.cp('-R', dir, copyDir)
+  return copyDir
+}
+
+export function replaceFile(dirPath: string, envConfig: Record<string, string>) {
   const { from, to } = generateFromTo(envConfig)
   const results = replace.sync({
     files: `${dirPath}/**/*`,
@@ -32,21 +40,8 @@ function replaceFile(dirPath: string, envConfig: Record<string, string>) {
   })
 }
 
-function getReactEnvCfg(): Record<string, string> {
-  const env = process.env
-  const keys = Object.keys(env)
-  const reactKeys = keys.filter(key => key.startsWith('REACT_APP_'))
-
-  const envCfg: Record<string, string> = {}
-  for (const key of reactKeys) {
-    // @ts-ignore
-    envCfg[key] = process.env[key]
-  }
-  return envCfg
-}
-
 export function replaceFilesInDir(dir: string) {
-  const envCfg = getReactEnvCfg()
+  const envCfg = { ...retrieveDotEnvCfg(), ...retrieveReactEnvCfg() }
   console.info('Injecting the following environment variables:')
   console.info(envCfg)
   replaceFile(dir, envCfg)

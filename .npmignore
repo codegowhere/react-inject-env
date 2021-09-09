@@ -1,0 +1,14 @@
+.github/
+coverage/
+src/
+tests/
+dist/tsconfig.tsbuildinfo
+
+.env
+.eslintrc.json
+.gitignore
+.prettierrc
+jest.config.js
+jest.setup.js
+tsconfig.json
+yarn.lock
