@@ -3,6 +3,7 @@ coverage/
 src/
 tests/
 dist/tsconfig.tsbuildinfo
+docs/
 
 .env
 .eslintrc.json
