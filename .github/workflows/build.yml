@@ -73,7 +73,7 @@ jobs:
       - run: |
           npx @siliconjungles/rn-scripts commit_tag "
             tag=${{env.VERSION_NAME}}
-            repo=https://$GITHUB_ACTOR:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git
+            repo=https://$GITHUB_ACTOR:${{secrets.GIT_TOKEN}}@github.com/$GITHUB_REPOSITORY.git
             message=${{env.VERSION_NAME}}"
 
   publish_next:
