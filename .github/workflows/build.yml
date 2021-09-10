@@ -4,9 +4,7 @@ on:
     branches:
       - 'master'
       - 'develop'
-      - 'release/**'
-      - 'hotfix/**'
-      - 'ci/**'
+      - 'npm/next'
 
 jobs:
   compile:
@@ -46,34 +44,7 @@ jobs:
       - if: steps.cache_node_modules.outputs.cache-hit != 'true'
         run: yarn install
 
-      - run: yarn run test_coverage
-
-  lint:
-    if: contains(github.ref, 'refs/heads/develop') || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/heads/hotfix') || contains(github.ref, 'refs/heads/ci')
-    needs: [compile,test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12'
-
-      - name: Cache node_modules
-        id: cache_node_modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-      - if: steps.cache_node_modules.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - run: yarn run lint
-      - run: yarn run test
-      - run: |
-          npx @siliconjungles/rn-scripts commit_all "
-            repo=https://$GITHUB_ACTOR:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git
-            branch=${GITHUB_REF:11}
-            message=Automated Linting"
+      - run: yarn run test:coverage
 
   publish:
     if: contains(github.ref, 'refs/heads/master')
@@ -104,3 +75,31 @@ jobs:
             tag=${{env.VERSION_NAME}}
             repo=https://$GITHUB_ACTOR:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git
             message=${{env.VERSION_NAME}}"
+
+  publish_next:
+    if:  contains(github.ref, 'refs/heads/npm/next')
+    needs: [compile, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - name: Cache node_modules
+        id: cache_node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      - if: steps.cache_node_modules.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - run: |
+          PKG_VERSION=$(npx @siliconjungles/rn-scripts get_version_name)
+          BUILD_NO=$GITHUB_RUN_NUMBER
+          VERSION=$PKG_VERSION-next.$BUILD_NO
+          npm version $VERSION --no-git-tag-version
+
+      - run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --access public --tag next

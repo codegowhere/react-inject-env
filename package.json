@@ -1,16 +1,18 @@
 {
   "name": "react-inject-env",
-  "version": "0.0.0-next.3",
+  "version": "1.0.0",
   "description": "Tool to inject environment variables into your React build",
   "author": "aelesia",
   "license": "MIT",
-  "repository": "https://github.com/aelesia/npx-react-inject-env",
-  "bin": "dist/index.js",
+  "repository": "https://github.com/codegowhere/react-inject-env",
+  "bin": {
+    "react-inject-env": "dist/index.js"
+  },
   "scripts": {
-    "prepublish": "tsc --build --clean --incremental false",
+    "prepublish": "tsc --incremental false",
     "compile": "tsc --noEmit && eslint src/**/*.ts tests/**/*.ts index.ts",
     "test": "jest",
-    "test_coverage": "jest --collectCoverage",
+    "test:coverage": "jest --collectCoverage",
     "lint": "eslint src/**/*.ts tests/**/*.ts index.ts --fix"
   },
   "dependencies": {
