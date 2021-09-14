@@ -1,6 +1,6 @@
 {
   "name": "react-inject-env",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool to inject environment variables into your React build",
   "author": "aelesia",
   "license": "MIT",
@@ -19,7 +19,8 @@
     "@aelesia/commons": "^0.5.0",
     "@rushstack/ts-command-line": "^4.9.0",
     "replace-in-file": "^6.2.0",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
@@ -27,7 +28,6 @@
     "@types/shelljs": "^0.8.9",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.10.0",
-    "dotenv": "^8.2.0",
     "dotenv-cli": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
