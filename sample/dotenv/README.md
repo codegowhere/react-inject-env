@@ -1,53 +1,48 @@
-# Building
-
-## 1. Building a base image
-
-Ensure your have a base `.env` file in the root folder. `react-inject-env` will use this file to create placeholders variables.
-
-```
-npx react-inject-env build <your build script>
-
-# Sample
-npx react-inject-env build npm run build
-```
-
-## 2. Injecting env variables into your image
-
-Ensure you have the correct `.env` file in the root folder. `react-inject-env` will use the variables from this file to inject them later on. 
-
-```
-npx react-inject-env inject -d <build folder> -o <output folder>`
-
-# Sample
-npx react-inject-env inject -d ./build -o ./build-black
-```
-
-
-## 3. Overriding .env variables from the command line
-
-If an env variable is passed through the command line, it will overwrite variables in the `.env` file.
-
-```
-REACT_APP_COLOR=pink npx react-inject-env inject -d ./build -o ./build-black
-
-// the app will now have a pink background
-```
-
 # Demo
 
 You may run the following commands to test out this project:
 
+## 1. Build
 ```
-# Build
 npx react-inject-env build npm run build
+```
 
-# Inject
+## 2. Inject
+
+```
 npx react-inject-env inject -d ./build -o ./build-black
+```
 
-# Serve
-npx http-server build-black
+## 3. Serve
 
-# Inject & serve with pink background
+```
+npx http-server build-black 
+```
+
+## 4. Change variables and re-serve
+
+Try editing the `.env` file in the root folder and steps #2 and steps #3
+
+
+_.env_
+```
+REACT_APP_COLOR = purple
+REACT_APP_LOGO_URL =./logo512.png
+REACT_APP_MAIN_TEXT = Insert Text here
+REACT_APP_LINK_URL = https://my.link
+```
+
+```
+npx react-inject-env inject -d ./build -o ./build-purple
+```
+
+## 5. Overwriting variables from command line
+
+If an env variable is passed through the command line, it will overwrite variables in the `.env` file.
+
+```
 REACT_APP_COLOR=pink npx react-inject-env inject -d ./build -o ./build-pink
+
+// the app will now have a pink background
 npx http-server build-pink
 ```
