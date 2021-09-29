@@ -47,11 +47,3 @@ REACT_APP_COLOR=black REACT_APP_LOGO_URL=https://i.imgur.com/RAylUAO.png REACT_A
 # Serve
 npx http-server build-black 
 ```
-
-## Substituting variables
-
-You may also substitute different environment variables during the `inject` step
-
-```
-REACT_APP_COLOR=blue REACT_APP_MAIN_TEXT='this has a blue background' npx react-inject-env inject -d ./build -o ./build-blue
-```
