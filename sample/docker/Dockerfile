@@ -1,11 +1,8 @@
 FROM node:16.10-slim
-COPY ../commandline/src /app
-COPY ../commandline/package*.json /app
+COPY . /app
 WORKDIR /app
 
 RUN npm install
-RUN npm install react-inject-env
-RUN npm install http-server
 
 RUN \
 REACT_APP_COLOR= \

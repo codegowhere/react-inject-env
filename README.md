@@ -4,6 +4,8 @@
 
 ## Usage
 
+[Sample project](./sample/commandline/README.md)
+
 ### 1. Update Code
 
 Create a new file called `env.js`, and place all your `process.env` variables here.
@@ -65,23 +67,48 @@ REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env injec
 
 ## .env / dotenv
 
+[Sample usage with .env](./sample/dotenv/README.md)
+
 `.env` files are supported. `react-inject-env` will automatically detect environment variables in your `.env` file located in your root folder.
 
 Note: Environment variables passed in through the command line will take precedence over `.env` variables.
 
-[Sample usage with .env](./sample/dotenv/README.md)
-
 ## Docker / CICD
-
-`react-inject-env` can be used together with Docker or other CI/CD programs.
 
 [Sample usage with Docker]()
 
-## Samples
+```dockerfile
+FROM node:16.10-slim
+COPY . /app
+WORKDIR /app
 
-1. [Sample](./sample/commandline/README.md)
+RUN npm install
+
+RUN \
+REACT_APP_COLOR= \
+REACT_APP_LOGO_URL= \
+REACT_APP_MAIN_TEXT= \
+REACT_APP_LINK_URL= \
+npx react-inject-env build npm run build
+
+EXPOSE 8080
+
+ENTRYPOINT \
+REACT_APP_COLOR=$REACT_APP_COLOR \
+REACT_APP_LOGO_URL=$REACT_APP_LOGO_URL \
+REACT_APP_MAIN_TEXT=$REACT_APP_MAIN_TEXT \
+REACT_APP_LINK_URL=$REACT_APP_LINK_URL \
+npx react-inject-env inject -d ./build \
+&& npx http-server build
+```
+
+Note: There is no need to use the `-o` parameter in Docker.
+
+## Sample Projects
+
+1. [Sample project](./sample/commandline/README.md)
 2. [.env sample](./sample/dotenv/README.md)
-3. [Docker sample]()
+3. [Docker sample](./sample/docker/README.md)
 
 # How it works
 
@@ -107,6 +134,7 @@ There have been a few workarounds, with the most common solution being to load e
 2. Minimal code change involved
 3. Allows sync access of environment variables
 4. Supports a wide amount of tools and scripts
+5. Works with command line environment variables
 
 ## Compatibility
 

@@ -47,3 +47,6 @@ npx react-inject-env inject -d ./build -o ./build-purple
 
 npx http-server build-purple
 ```
+
+# Docker
+
