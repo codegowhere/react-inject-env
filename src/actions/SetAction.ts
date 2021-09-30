@@ -43,7 +43,7 @@ export class SetAction extends CommandLineAction {
       required: false,
     })
 
-    this._fileName = this.defineStringParameter({
+    this._varName = this.defineStringParameter({
       description: 'Overwrite the variable name that will be stored in `window`',
       parameterLongName: '--var',
       parameterShortName: '-v',
