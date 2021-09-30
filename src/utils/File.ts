@@ -48,9 +48,9 @@ export function replaceFilesInDir(dir: string) {
   replaceFile(dir, envCfg)
 }
 
-export function outputEnvFile(folder: string, fileName: string, envCfg: Record<string, string>) {
+export function outputEnvFile(folder: string, fileName: string, envCfg: Record<string, string>, varName: string) {
   shell.mkdir('-p', './build')
   console.info('Setting the following environment variables:')
   console.info(envCfg)
-  writeFileSync(`${folder}/${fileName}`, `window.reactinject.env = ${JSON.stringify(envCfg, null, 2)}`)
+  writeFileSync(`${folder}/${fileName}`, `window.${varName} = ${JSON.stringify(envCfg, null, 2)}`)
 }

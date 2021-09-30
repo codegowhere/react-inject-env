@@ -1,12 +1,12 @@
-function getEnv<T extends object>(): T {
+function getEnv<T extends object>(varName = 'env'): T {
   let env = {}
   if (typeof process?.env === 'object') {
     Object.assign(env, process.env)
   }
   // @ts-ignore
-  if (typeof window['reactinject']?.env === 'object') {
+  if (typeof window[varName]?.env === 'object') {
     // @ts-ignore
-    Object.assign(env, window['reactinject'].env)
+    Object.assign(env, window[varName])
   }
   return env as T
 }

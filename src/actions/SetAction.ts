@@ -17,6 +17,13 @@ export class SetAction extends CommandLineAction {
     return this._fileName.value!
   }
 
+  private _varName!: CommandLineStringParameter
+  get varName(): string {
+    // --var has a default value of 'env'
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._varName.value!
+  }
+
   protected onDefineParameters(): void {
     this._dir = this.defineStringParameter({
       description: 'Specify the location of your build folder',
@@ -35,18 +42,27 @@ export class SetAction extends CommandLineAction {
       defaultValue: 'env.js',
       required: false,
     })
+
+    this._fileName = this.defineStringParameter({
+      description: 'Overwrite the variable name that will be stored in `window`',
+      parameterLongName: '--var',
+      parameterShortName: '-v',
+      argumentName: 'VAR_NAME',
+      defaultValue: 'env',
+      required: false,
+    })
   }
 
   public constructor() {
     super({
       actionName: 'set',
-      summary: 'Inject environment variables into your React /build folder.',
+      summary: 'Set environment variables into your React /build folder.',
       documentation: 'TODO',
     })
   }
 
   protected async onExecute(): Promise<void> {
     const envCfg = { ...retrieveDotEnvCfg(), ...retrieveReactEnvCfg() }
-    outputEnvFile(this.dir, this.fileName, envCfg)
+    outputEnvFile(this.dir, this.fileName, envCfg, this.varName)
   }
 }
