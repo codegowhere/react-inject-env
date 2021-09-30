@@ -1,6 +1,6 @@
 {
   "name": "react-inject-env",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tool to inject environment variables into your React build",
   "author": "aelesia",
   "license": "MIT",
