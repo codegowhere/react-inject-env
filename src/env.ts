@@ -4,7 +4,7 @@ function getEnv<T extends object>(varName = 'env'): T {
     Object.assign(env, process.env)
   }
   // @ts-ignore
-  if (typeof window[varName]?.env === 'object') {
+  if (typeof window?.[varName] === 'object') {
     // @ts-ignore
     Object.assign(env, window[varName])
   }
