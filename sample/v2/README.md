@@ -57,7 +57,7 @@ npx react-inject-env set && npx http-server build
 
 Note: Environment variables passed from the command line will always overwrite `.env` variables
 
-## 6. Docker
+# Docker
 
 Build the Docker image
 

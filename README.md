@@ -64,24 +64,51 @@ REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env set
 
 ## .env / dotenv
 
-[Sample usage with .env](./sample/dotenv/README.md)
-
 `.env` files are supported. `react-inject-env` will automatically detect environment variables in your `.env` file located in your root folder.
 
 Note: Environment variables passed in through the command line will take precedence over `.env` variables.
 
 ## Docker / CICD
 
-[Sample usage with Docker]()
+`npx-react-env` works well with both Docker and CI/CD. 
 
+[Sample usage with Docker](./sample/v2/README.md#Docker)
 
-## Sample Projects
+```dockerfile
+FROM node:16.10-slim
+COPY . /app
+WORKDIR /app
 
-1. [Sample project](./sample/v2/README.md)
+RUN npm install
+RUN npm run build
 
-# Information
+EXPOSE 8080
 
-## Why do I need this?
+ENTRYPOINT npx react-inject-env set && npx http-server build
+```
+
+```
+docker build . -t react-inject-env-sample-v2
+
+docker run -p 8080:8080 \                   
+-e REACT_APP_COLOR=yellow \
+-e REACT_APP_LOGO_URL=./logo512.png \
+-e REACT_APP_MAIN_TEXT="docker text" \
+-e REACT_APP_LINK_URL=https://docker.link \
+react-inject-env-sample-v2
+```
+
+## Other versions
+
+If you need to modify environment variables in the `index.html` file, you need to use the `inject` and `build` method documented in v1.0.
+
+### v1.0
+
+v1.0 documentation can be found here
+
+## Information
+
+### Why do I need this?
 
 A typical CI/CD process usually involves building a base image, followed by injecting variables and deploying it. 
 
@@ -89,9 +116,9 @@ Unfortunately React applications does not allow for this workflow as it requires
 
 There have been a few workarounds, with the most common solution being to load environment variables from an external source. However this now causes the additional problem that environment variables can only be accessed asynchronously.
 
-## Goals
+### Goals
 
-`react-inject-env` attempts to solve this problem in the simplest and most straightforward way with the following goals in mind:
+`react-inject-env` attempts to solve this problem in the simplest, and most straightforward way with the following goals in mind:
 
 1. Does not require a rebuild
 2. Minimal code change required
@@ -100,7 +127,7 @@ There have been a few workarounds, with the most common solution being to load e
 5. Works with command line environment variables
 6. Simple and straightforward
 
-## Compatibility
+### Compatibility
 
 `react-inject-env` was built with support for both `create-react-app` and `dotenv`. 
 
