@@ -4,16 +4,15 @@
 
 ## Usage
 
-[Sample project](./sample/commandline/README.md)
+[Sample project](./sample/v2/README.md)
 
+### 1. Update Code
 
-### 1. Add the following script to index.html
+- Add the following to `index..html`
 
 ```html
 <script src='/env.js'></script>
 ```
-
-### 2. Update Code
 
 - Create a new file called `env.js` and copy the following code:
 
@@ -34,11 +33,12 @@ export const App = () => {
   )
 }
 ```
-### 3. Build your static files
+
+### 2. Build your static files
 
 If you are using `create-react-app`, the command should be `npm run build` or `react-scripts build`.
 
-### 4. Inject environment variables
+### 3. Inject environment variables
 
 ```
 [env variables] npx react-inject-env set
@@ -68,6 +68,27 @@ REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env set
 
 Note: Environment variables passed in through the command line will take precedence over `.env` variables.
 
+## Typescript
+
+In step #2, create a file called `env.ts` instead of `env.js`
+
+```ts
+declare global {
+  interface Window {
+    env: any
+  }
+}
+
+// change with your own variables
+type EnvType = {
+  REACT_APP_COLOR: string,
+  REACT_APP_MAIN_TEXT: string,
+  REACT_APP_LINK_URL: string,
+  REACT_APP_LOGO_URL: string
+}
+export const env: EnvType = { ...process.env, ...window.env }
+```
+
 ## Docker / CICD
 
 `npx-react-env` works well with both Docker and CI/CD. 
@@ -87,7 +108,7 @@ EXPOSE 8080
 ENTRYPOINT npx react-inject-env set && npx http-server build
 ```
 
-```
+```shell
 docker build . -t react-inject-env-sample-v2
 
 docker run -p 8080:8080 \                   
@@ -98,13 +119,9 @@ docker run -p 8080:8080 \
 react-inject-env-sample-v2
 ```
 
-## Other versions
+## index.html
 
-If you need to modify environment variables in the `index.html` file, you need to use the `inject` and `build` method documented in v1.0.
-
-### v1.0
-
-v1.0 documentation can be found here
+If you need to modify environment variables in the `index.html` file, you cannot use the method described above. You will have to follow the [v1.0 guide here](./docs/v1.md).
 
 ## Information
 
