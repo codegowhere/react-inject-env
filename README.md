@@ -4,78 +4,96 @@
 
 ## Usage
 
-[Sample project](./sample/commandline/README.md)
+[Sample project](./sample/v2/README.md)
 
 ### 1. Update Code
 
-Create a new file called `env.js`, and place all your `process.env` variables here.
+- Add the following to `index..html`
 
-```js
-export const env = {
-    REACT_APP_COLOR: process.env.REACT_APP_COLOR,
-    REACT_APP_LOGO_URL: process.env.REACT_APP_LOGO_URL,
-    REACT_APP_MAIN_TEXT: process.env.REACT_APP_MAIN_TEXT,
-    REACT_APP_LINK_URL: process.env.REACT_APP_LINK_URL
-}
+```html
+<script src='/env.js'></script>
 ```
 
-When referencing environment variables, import `env` and reference it from there instead. **Do not** access `process.env` directly from now on.
+- Create a new file called `env.js` and copy the following code:
+
+```js
+export const env = { ...process.env, ...window['env'] }
+```
+
+- Replace all instances of `process.env` with the newly created `env` variable
 
 ```jsx
 import { env } from './env'
 
 export const App = () => {
-    return (
-      <div style={{backgroundColor: env.REACT_APP_COLOR}}>
-        <span>{env.REACT_APP_MAIN_TEXT}</span>
-      </div>
-    )
+  return (
+    <div style={{backgroundColor: env.REACT_APP_COLOR}}>
+      <span>{env.REACT_APP_MAIN_TEXT}</span>
+    </div>
+  )
 }
 ```
 
-### 2. Build static files with placeholders
+### 2. Build your static files
 
-```
-[env variable names] npx react-inject-env build [your build script]
-```
-
-Pass in all your environment variable names (the value does not matter), then run `npx react-inject-env build`, followed by your build script.
-
-```shell
-# if your build script is 'npm run build'
-REACT_APP_COLOR= REACT_APP_TEXT= npx react-inject-env build npm run build
-
-# if your build script is 'react-scripts build'
-REACT_APP_COLOR= REACT_APP_TEXT= npx react-inject-env build react-scripts-build 
-```
+If you are using `create-react-app`, the command should be `npm run build` or `react-scripts build`.
 
 ### 3. Inject environment variables
 
 ```
-[env variables] react-inject-env inject -d [path to build folder] -o [new output path]
+[env variables] npx react-inject-env set
 ```
 
-Pass in all your environment variables, followed by the path to your build folder in `Step #2`, and the new output path for the static files that will contain the injected environment variables.
+Pass in all your environment variables.
 
 ```shell
 # with a black background
-REACT_APP_COLOR=black REACT_APP_TEXT="Black Background" npx react-inject-env inject -d build -o build-black
+REACT_APP_COLOR=black REACT_APP_TEXT="Black Background" npx react-inject-env set
 
 # with a blue background
-REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env inject -d build -o build-blue
+REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env set
 ```
 
-## .env / dotenv
+### Additional options
 
-[Sample usage with .env](./sample/dotenv/README.md)
+`-d / --dir`: The location of your static build folder. Defaults to `./build`
+
+`-n / --name`: The name of the env file that is outputted. Defaults to `env.js`
+
+`-v / --var`: The variable name in `window` object that stores the environment variables. The default is `env` (window.**env**). However if you already have a variable called `window.env`, you may rename it to avoid conflicts.
+
+## .env / dotenv
 
 `.env` files are supported. `react-inject-env` will automatically detect environment variables in your `.env` file located in your root folder.
 
 Note: Environment variables passed in through the command line will take precedence over `.env` variables.
 
+## Typescript
+
+In step #2, create a file called `env.ts` instead of `env.js`
+
+```ts
+declare global {
+  interface Window {
+    env: any
+  }
+}
+
+// change with your own variables
+type EnvType = {
+  REACT_APP_COLOR: string,
+  REACT_APP_MAIN_TEXT: string,
+  REACT_APP_LINK_URL: string,
+  REACT_APP_LOGO_URL: string
+}
+export const env: EnvType = { ...process.env, ...window.env }
+```
+
 ## Docker / CICD
 
-[Sample usage with Docker]()
+`npx-react-env` works well with both Docker and CI/CD. 
+
+[Sample usage with Docker](./sample/v2/README.md#Docker)
 
 ```dockerfile
 FROM node:16.10-slim
@@ -83,42 +101,31 @@ COPY . /app
 WORKDIR /app
 
 RUN npm install
-
-RUN \
-REACT_APP_COLOR= \
-REACT_APP_LOGO_URL= \
-REACT_APP_MAIN_TEXT= \
-REACT_APP_LINK_URL= \
-npx react-inject-env build npm run build
+RUN npm run build
 
 EXPOSE 8080
 
-ENTRYPOINT \
-REACT_APP_COLOR=$REACT_APP_COLOR \
-REACT_APP_LOGO_URL=$REACT_APP_LOGO_URL \
-REACT_APP_MAIN_TEXT=$REACT_APP_MAIN_TEXT \
-REACT_APP_LINK_URL=$REACT_APP_LINK_URL \
-npx react-inject-env inject -d ./build \
-&& npx http-server build
+ENTRYPOINT npx react-inject-env set && npx http-server build
 ```
 
-Note: There is no need to use the `-o` parameter in Docker.
+```shell
+docker build . -t react-inject-env-sample-v2
 
-## Sample Projects
+docker run -p 8080:8080 \                   
+-e REACT_APP_COLOR=yellow \
+-e REACT_APP_LOGO_URL=./logo512.png \
+-e REACT_APP_MAIN_TEXT="docker text" \
+-e REACT_APP_LINK_URL=https://docker.link \
+react-inject-env-sample-v2
+```
 
-1. [Sample project](./sample/commandline/README.md)
-2. [.env sample](./sample/dotenv/README.md)
-3. [Docker sample](./sample/docker/README.md)
+## index.html
 
-# How it works
+If you need to modify environment variables in the `index.html` file, you cannot use the method described above. You will have to follow the [v1.0 guide here](./docs/v1.md).
 
-`react-inject-env` works in two stages.
+## Information
 
-First, it detects environment variables and builds the static files with placeholders. For example, a variable name with the name `REACT_APP_COLOR` gets replaced with `ReactInjectEnv_REACT_APP_COLOR`.
-
-In the second stage, `react-inject-env` searches for all placeholder occurances, then does a direct replacement with the new environment variable provided.
-
-## Why do I need this?
+### Why do I need this?
 
 A typical CI/CD process usually involves building a base image, followed by injecting variables and deploying it. 
 
@@ -126,17 +133,18 @@ Unfortunately React applications does not allow for this workflow as it requires
 
 There have been a few workarounds, with the most common solution being to load environment variables from an external source. However this now causes the additional problem that environment variables can only be accessed asynchronously.
 
-## Goals
+### Goals
 
-`react-inject-env` attempts to solve this problem in the simplest and most straightforward way with the following in mind:
+`react-inject-env` attempts to solve this problem in the simplest, and most straightforward way with the following goals in mind:
 
 1. Does not require a rebuild
-2. Minimal code change involved
-3. Allows sync access of environment variables
+2. Minimal code change required
+3. Allows synchronous access of environment variables
 4. Supports a wide amount of tools and scripts
 5. Works with command line environment variables
+6. Simple and straightforward
 
-## Compatibility
+### Compatibility
 
 `react-inject-env` was built with support for both `create-react-app` and `dotenv`. 
 

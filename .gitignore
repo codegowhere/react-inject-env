@@ -3,6 +3,7 @@ dist
 .idea
 build
 build-*
+**/public/env.js
 
 # src/**/*.js
 package-lock.json
