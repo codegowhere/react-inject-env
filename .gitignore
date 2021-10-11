@@ -1,6 +1,8 @@
 node_modules
 dist
 .idea
+build
+build-*
 
 # src/**/*.js
 package-lock.json
