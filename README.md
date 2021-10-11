@@ -1,52 +1,56 @@
-# Usage
+# react-inject-env
 
-`<npx react-inject-env <build folder>`
+`react-inject-env` is a tool that allows you to build your static webpage files first, then inject in the variables later on. This allows you to build the static webpage files once, but deploy it to multiple environments with different variables.
 
-Example:
+## Usage
 
-`npx react-inject-env build`
+`react-inject-env` requires 2 stages
 
-## 
+1. Building with placeholder variables
+2. Injecting the variables in
 
-# Testing
+### build
 
-## Link module
-    npm link
+```
+react-inject-env build <your build script>
+```
 
-## Link module from another project
-    npm link <package.json.name>
+The first stage is building the static files with placeholder variables. `react-inject-env` will automatically detect variables from both the command line and from your `.env` file.
 
-# npm
+Upon successful building, you may open your files to check. You should see a placeholder variable with the prefix `ReactInjectEnv_` in place of your environment variables.
 
-## Login / Logout
 
-    npm login
-    npm logout
-    
-## Profile
-    
-    npm profile get
-    npm whoami
+**Examples**
 
-## Publishing
+```shell
+# if your build script is 'npm run build'
+react-inject-env build npm run build
 
-First Publish:
+# if your build script is `react-scripts build`
+react-inject-env build react-scripts-build
 
-    npm publish --access public
-    
-Subsequent Publishes:
+# if you wish to inject environment variables through the command line
+REACT_APP_ENVVAR1=A REACT_APP_ENVVAR2=B react-inject-env build npm run build 
+```
 
-    npm publish
+### inject
 
-Publish only specific tag:
+```
+react-inject-env inject -d <path to /build folder> -o <output path>`
+```
 
-    npm publish --tag develop
-    
-## Unpublishing
+The second stage is injecting your environment variables into the static file. **react-inject-env** will automatically detect variables from both the command line and from your `.env` file.
 
-    npm unpublish <package-name> -f
-    npm unpublish <package-name>@<version>
+Upon successful injection, the placeholder variables will be replaced with your environment variables.
 
-## CI
+**Example**
 
-https://stackoverflow.com/questions/54665511/how-do-i-publish-a-private-npm-package-with-gitlab-ci
+```shell
+react-inject-env inject -d build -o build-dev
+
+# if you wish to inject environment variables through the command line
+REACT_APP_ENVVAR1=A REACT_APP_ENVVAR2=B react-inject-env inject -d build -o build-dev
+
+# if you wish to overwrite the original files instead of outputting to a new folder, you may omit the -o command
+react-inject-env inject -d build
+```
