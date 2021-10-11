@@ -4,6 +4,8 @@ src/
 tests/
 dist/tsconfig.tsbuildinfo
 docs/
+sample/
+
 
 .env
 .eslintrc.json
