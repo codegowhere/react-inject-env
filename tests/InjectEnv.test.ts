@@ -119,4 +119,39 @@ describe('react-inject-env', () => {
       expect(readFile('tests/output2/test4.txt')).toContain('REACT_APP_INJECT_ENV4: D')
     })
   })
+
+  describe('Set', () => {
+    it('should generate env.js file in specified directory', () => {
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3'])
+      expect(()=>readFile('tests/output3/env.js')).not.toThrowError()
+    })
+    it('should rename output env file based on param', () => {
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env2.js'])
+      expect(()=>readFile('tests/output3/env2.js')).not.toThrowError()
+    })
+    it('should generate env file based on process.env variables', () => {
+      process.env['REACT_APP_SET_ENV1'] = 'ENV1'
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env3.js'])
+      expect(readFile('tests/output3/env3.js')).toContain('"REACT_APP_SET_ENV1": "ENV1"')
+    })
+    it('should generate env file based on dotenv variables', () => {
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env4.js'])
+      expect(readFile('tests/output3/env4.js')).toContain('"REACT_APP_SET_ENV2": "C"')
+    })
+    it('should not pick up env variables not starting with REACT_APP', () => {
+      process.env['SET_GENERIC_ENV'] = 'GENERIC_ENV'
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env5.js'])
+      expect(readFile('tests/output3/env5.js')).not.toContain('"SET_GENERIC_ENV": "GENERIC_ENV"')
+    })
+    it('should rename window variable name based on param', () => {
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env6.js', '-v', 'randomVarName'])
+      expect(readFile('tests/output3/env6.js')).toContain('window.randomVarName = {')
+    })
+  })
 })
