@@ -55,10 +55,13 @@ Pass in all your environment variables.
 
 ```shell
 # with a black background
-REACT_APP_COLOR=black REACT_APP_TEXT="Black Background" npx react-inject-env set
+REACT_APP_COLOR=black REACT_APP_MAIN_TEXT="Black Background" npx react-inject-env set
 
 # with a blue background
-REACT_APP_COLOR=blue REACT_APP_TEXT="Blue Background" npx react-inject-env set
+REACT_APP_COLOR=blue REACT_APP_MAIN_TEXT="Blue Background" npx react-inject-env set
+
+# for windows
+set REACT_APP_COLOR=navy&& set REACT_APP_MAIN_TEXT=Navy Background&& npx react-inject-env set
 ```
 
 ### Additional options
