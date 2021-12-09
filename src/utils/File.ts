@@ -4,20 +4,17 @@ import { Cfg } from '../app/Config'
 import { retrieveDotEnvCfg, retrieveReactEnvCfg } from './Utils'
 import { writeFileSync } from 'fs'
 
-function generateFromTo(
-  envCfg: Record<string, string>,
-  prefix = [Cfg.PREFIX, Cfg.PLACEHOLDER]
-): {
+function generateFromTo(envCfg: Record<string, string>): {
   from: string[] | RegExp[]
   to: string[]
 } {
   const from = Object.keys(envCfg)
-    .map((key) => key.replace(prefix[0], prefix[1]))
+    .map((key) => `${Cfg.PLACEHOLDER_2}${key}`)
     .map((key) => new RegExp(`\\b${key}\\b`, 'g'))
   const to = Object.values(envCfg)
   return {
     from: from,
-    to: to,
+    to: to
   }
 }
 
@@ -32,7 +29,7 @@ export function replaceFile(dirPath: string, envConfig: Record<string, string>) 
     files: `${dirPath}/**/*`,
     from: from,
     to: to,
-    countMatches: true,
+    countMatches: true
   })
   results.forEach((it) => {
     if (it.hasChanged) {
