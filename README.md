@@ -119,9 +119,9 @@ docker run -p 8080:8080 \
 react-inject-env-sample-v2
 ```
 
-## index.html
+## Previous Version v1.0
 
-If you need to modify environment variables in the `index.html` file, you cannot use the method described above. You will have to follow the [v1.0 guide here](./docs/v1.md).
+For instructions on the previous version, you may follow the [v1.0 guide here](./docs/v1.md).
 
 ## Information
 

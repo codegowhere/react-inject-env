@@ -1,6 +1,6 @@
 {
   "name": "react-inject-env",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Tool to inject environment variables into your React build",
   "author": "es-lynn",
   "license": "MIT",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@aelesia/commons": "^0.5.0",
     "@rushstack/ts-command-line": "^4.9.0",
-    "replace-in-file": "^6.2.0",
+    "replace-in-file": "^6.3.2",
     "shelljs": "^0.8.4",
     "dotenv": "^8.2.0"
   },
