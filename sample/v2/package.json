@@ -14,7 +14,9 @@
   },
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
+    "start:win": "set SKIP_PREFLIGHT_CHECK=true && react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "build:win": "set SKIP_PREFLIGHT_CHECK=true && react-scripts build",
     "serve": "http-server build"
   },
   "eslintConfig": {

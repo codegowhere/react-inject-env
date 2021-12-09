@@ -18,6 +18,9 @@ REACT_APP_LOGO_URL=https://i.imgur.com/RAylUAO.png \
 REACT_APP_MAIN_TEXT=react-inject-env \
 REACT_APP_LINK_URL=https://www.npmjs.com/package/react-inject-env \
 npx react-inject-env set
+
+# Windows
+set REACT_APP_COLOR=navy&& set REACT_APP_LOGO_URL=https://i.imgur.com/RAylUAO.png&& set REACT_APP_MAIN_TEXT=react-inject-env&& set REACT_APP_LINK_URL=https://www.npmjs.com/package/react-inject-env&& npx react-inject-env set
 ```
 
 ## 3. Serve
