@@ -6,9 +6,16 @@
 
 [Sample project](./sample/v2/README.md)
 
-### 1. Update Code
+### 1. Install react-inject-env
 
-- Add the following to `index..html`
+```
+npm install react-inject-env --save-dev
+yarn add react-inject-env --dev
+```
+
+### 2. Update Code
+
+- Add the following to `index.html`
 
 ```html
 <script src='/env.js'></script>
@@ -34,11 +41,11 @@ export const App = () => {
 }
 ```
 
-### 2. Build your static files
+### 3. Build your static files
 
 If you are using `create-react-app`, the command should be `npm run build` or `react-scripts build`.
 
-### 3. Inject environment variables
+### 4. Inject environment variables
 
 ```
 [env variables] npx react-inject-env set
