@@ -29,19 +29,7 @@ set REACT_APP_COLOR=navy&& set REACT_APP_LOGO_URL=https://i.imgur.com/RAylUAO.pn
 npx http-server build 
 ```
 
-## 4. Change variables and re-serve
-
-Try changing some variables and re-run step #2 and step #3.
-
-```
-REACT_APP_COLOR=purple \
-REACT_APP_LOGO_URL=https://i.imgur.com/RAylUAO.png \
-REACT_APP_MAIN_TEXT="Insert Text here" \
-REACT_APP_LINK_URL=https://my.link \
-npx react-inject-env set && npx http-server build
-```
-
-## 5. Usage with dotenv
+## 4. Usage with dotenv
 
 You may also use variables from dotenv. Create a `.env` file at `sample/v2/.env` and paste the following variables:
 

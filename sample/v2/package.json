@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "http-server": "^13.0.2",
-    "react-inject-env": "^2.0.0"
+    "react-inject-env": "^2.1.0"
   },
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
