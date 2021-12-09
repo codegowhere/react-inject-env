@@ -26,6 +26,11 @@ describe('react-inject-env', () => {
       const file = buildFile()
       expect(file).toContain('REACT_APP_PROCESS_ENV: ReactInjectEnv_REACT_APP_PROCESS_ENV')
     })
+    it('should take in PUBLIC_URL env variable', () => {
+      process.env['PUBLIC_URL'] = ''
+      const file = buildFile()
+      expect(file).toContain('PUBLIC_URL: ReactInjectEnv_PUBLIC_URL')
+    })
     it('should build file with placeholders from dotenv file', () => {
       shell.exec('echo REACT_APP_DOT_ENV = DOT_ENV > .env')
       const file = buildFile()
@@ -74,6 +79,15 @@ describe('react-inject-env', () => {
       commandLine.execute(['inject', '-d', 'tests/output'])
       const file = readFile('tests/output/test2.txt')
       expect(file).toContain('REACT_APP_INJECT_ENV1: A')
+    })
+
+    it('should update PUBLIC_URL', () => {
+      process.env['PUBLIC_URL'] = 'https://www.google.com'
+      buildFile()
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['inject', '-d', 'tests/output'])
+      const file = readFile('tests/output/test2.txt')
+      expect(file).toContain('PUBLIC_URL: https://www.google.com')
     })
 
     it('should replace file with injected env variables from dotenv', () => {

@@ -3,7 +3,9 @@ import { Cfg } from '../app/Config'
 export function retrieveReactEnvCfg(): Record<string, string> {
   const env = process.env
   const keys = Object.keys(env)
-  const reactKeys = keys.filter(key => key.startsWith(Cfg.PREFIX))
+  const reactKeys = keys.filter(key => {
+    return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
+  })
 
   const envCfg: Record<string, string> = {}
   for (const key of reactKeys) {
@@ -18,7 +20,9 @@ export function retrieveDotEnvCfg(): Record<string, string> {
   const env = require('dotenv').config().parsed ?? {}
 
   const keys = Object.keys(env)
-  const reactKeys = keys.filter(key => key.startsWith(Cfg.PREFIX))
+  const reactKeys = keys.filter(key => {
+    return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
+  })
 
   const envCfg: Record<string, string> = {}
   for (const key of reactKeys) {
