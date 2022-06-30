@@ -15,13 +15,13 @@ yarn add react-inject-env --dev
 
 ### 2. Update Code
 
-- Add the following to `index.html`
+- Add the following to `index.html`, to include the generated env.js:
 
 ```html
-<script src='/env.js'></script>
+<script src='%PUBLIC_URL%/env.js'></script>
 ```
 
-- Create a new file called `env.js` and copy the following code:
+- Create a new file in your `src` called `env.js` and copy the following code:
 
 ```js
 export const env = { ...process.env, ...window['env'] }
@@ -50,6 +50,8 @@ If you are using `create-react-app`, the command should be `npm run build` or `r
 ```
 [env variables] npx react-inject-env set
 ```
+
+That will generate the `env.js` in your build directory.
 
 Pass in all your environment variables.
 
@@ -101,7 +103,7 @@ export const env: EnvType = { ...process.env, ...window.env }
 
 ## Docker / CICD
 
-`npx-react-env` works well with both Docker and CI/CD. 
+`npx-react-env` works well with both Docker and CI/CD.
 
 [Sample usage with Docker](./sample/v2/README.md#Docker)
 
@@ -121,7 +123,7 @@ ENTRYPOINT npx react-inject-env set && npx http-server build
 ```shell
 docker build . -t react-inject-env-sample-v2
 
-docker run -p 8080:8080 \                   
+docker run -p 8080:8080 \
 -e REACT_APP_COLOR=yellow \
 -e REACT_APP_LOGO_URL=./logo512.png \
 -e REACT_APP_MAIN_TEXT="docker text" \
@@ -137,9 +139,9 @@ For instructions on the previous version, you may follow the [v1.0 guide here](.
 
 ### Why do I need this?
 
-A typical CI/CD process usually involves building a base image, followed by injecting variables and deploying it. 
+A typical CI/CD process usually involves building a base image, followed by injecting variables and deploying it.
 
-Unfortunately React applications does not allow for this workflow as it requires environment variables to be present before building it. 
+Unfortunately React applications does not allow for this workflow as it requires environment variables to be present before building it.
 
 There have been a few workarounds, with the most common solution being to load environment variables from an external source. However this now causes the additional problem that environment variables can only be accessed asynchronously.
 
@@ -156,6 +158,6 @@ There have been a few workarounds, with the most common solution being to load e
 
 ### Compatibility
 
-`react-inject-env` was built with support for both `create-react-app` and `dotenv`. 
+`react-inject-env` was built with support for both `create-react-app` and `dotenv`.
 
 However due to the simplicity of it, it should work with almost all scripts and tools.
