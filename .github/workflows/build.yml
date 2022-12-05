@@ -52,6 +52,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@neolime-GmbH'
 
       - name: Cache node_modules
         id: cache_node_modules
