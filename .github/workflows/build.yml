@@ -64,6 +64,6 @@ jobs:
       - if: steps.cache_node_modules.outputs.cache-hit != 'true'
         run: yarn install
 
-      - run: yarn publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
