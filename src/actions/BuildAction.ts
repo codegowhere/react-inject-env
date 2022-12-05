@@ -72,8 +72,6 @@ export class BuildAction extends CommandLineAction {
   }
 
   protected async onExecute(): Promise<void> {
-    console.log("Vallah: " + this.envVariablePrefix);
-
     const dotEnvCfg = this.dotEnvEnabled ? retrieveDotEnvCfg(this.envVariablePrefix) : {}
     const env = { ...dotEnvCfg, ...retrieveReactEnvCfg(this.envVariablePrefix) }
     console.info('Building with the following variables', Obj.pick(env, this.bypassEnvVar))

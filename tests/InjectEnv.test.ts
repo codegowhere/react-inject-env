@@ -104,12 +104,12 @@ describe('react-inject-env', () => {
     })
 
     it('should replace file with injected env variables from dotenv matching custom prefix', () => {
-      shell.exec('echo MY_CUSTOM_PREFIX_TEST_VAR = B > .env')
+      shell.exec('echo MY_CUSTOM_PREFIX_TEST_VAR2 = B > .env')
       buildFile()
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['inject', '-p', 'MY_CUSTOM_PREFIX_', '-d', 'tests/output'])
       const file = readFile('tests/output/test2.txt')
-      expect(file).toContain('MY_CUSTOM_PREFIX_TEST_VAR: B')
+      expect(file).toContain('MY_CUSTOM_PREFIX_TEST_VAR2: B')
     })
 
     it('should replace all files in directory', () => {
@@ -151,6 +151,7 @@ describe('react-inject-env', () => {
       expect(readFile('tests/output3/env3.js')).toContain('"REACT_APP_SET_ENV1": "ENV1"')
     })
     it('should generate env file based on dotenv variables', () => {
+      shell.exec('echo REACT_APP_SET_ENV2 = C > .env')
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env4.js'])
       expect(readFile('tests/output3/env4.js')).toContain('"REACT_APP_SET_ENV2": "C"')
