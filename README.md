@@ -72,6 +72,8 @@ set REACT_APP_COLOR=navy&& set REACT_APP_MAIN_TEXT=Navy Background&& npx react-i
 
 `-v / --var`: The variable name in `window` object that stores the environment variables. The default is `env` (window.**env**). However if you already have a variable called `window.env`, you may rename it to avoid conflicts.
 
+`-p / --prefix`: Defines the prefix of variables that are supposed to be used. Defaults to `REACT_APP_`
+
 ## .env / dotenv
 
 `.env` files are supported. `react-inject-env` will automatically detect environment variables in your `.env` file located in your root folder.
