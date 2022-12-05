@@ -41,6 +41,8 @@ jobs:
 
       - run: yarn install
 
+      - run: npm config set '//npm.pkg.github.com/:_authToken' "${NPMJS_TOKEN}"
+
       - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+          NPMJS_TOKEN: ${{ secrets.NPMJS_TOKEN }}
