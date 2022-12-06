@@ -14,6 +14,13 @@ export class InjectAction extends CommandLineAction {
     return this._cp?.value
   }
 
+  private _envVariablePrefix!: CommandLineStringParameter
+  get envVariablePrefix(): string {
+    // --prefix has a default value of 'REACT_APP_'
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._envVariablePrefix.value!
+  }
+
   protected onDefineParameters(): void {
     this._dir = this.defineStringParameter({
       description: 'Specify the location of your build folder',
@@ -28,6 +35,15 @@ export class InjectAction extends CommandLineAction {
       parameterLongName: '--output',
       parameterShortName: '-o',
       argumentName: 'PATH_TO_OUTPUT_FOLDER'
+    })
+
+    this._envVariablePrefix = this.defineStringParameter({
+      description: 'Specify the prefix of environment variables to load',
+      parameterLongName: '--prefix',
+      parameterShortName: '-p',
+      argumentName: 'ENV_VAR_PREFIX',
+      defaultValue: 'REACT_APP_',
+      required: false,
     })
   }
 
@@ -45,6 +61,6 @@ export class InjectAction extends CommandLineAction {
       copyFolder(this.dir, this.cp)
       folder = this.cp
     }
-    replaceFilesInDir(folder)
+    replaceFilesInDir(folder, this.envVariablePrefix)
   }
 }

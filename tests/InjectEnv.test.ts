@@ -40,9 +40,13 @@ describe('react-inject-env', () => {
       const file = buildFile()
       expect(file).toContain('REACT_APP_NO_INPUT: \n')
     })
-    it('should not overwrite variables that do not start with REACT_APP_', () => {
+    it('should not overwrite variables that do not start with the prefix', () => {
       process.env['GENERIC_ENV'] = ''
-      const file = buildFile()
+      process.env['MY_CUSTOM_PREFIX_TEST_VAR'] = ''
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['build', '--prefix', 'MY_CUSTOM_PREFIX_', 'sh', 'tests/scripts/buildFile.sh'])
+      const file = readFile('tests/output/test.txt')
+      expect(file).toContain(`MY_CUSTOM_PREFIX_TEST_VAR: ReactInjectEnv_MY_CUSTOM_PREFIX_TEST_VAR`)
       expect(file).toContain('GENERIC_ENV: \n')
     })
 
@@ -99,6 +103,15 @@ describe('react-inject-env', () => {
       expect(file).toContain('REACT_APP_INJECT_ENV2: B')
     })
 
+    it('should replace file with injected env variables from dotenv matching custom prefix', () => {
+      shell.exec('echo MY_CUSTOM_PREFIX_TEST_VAR2 = B > .env')
+      buildFile()
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['inject', '-p', 'MY_CUSTOM_PREFIX_', '-d', 'tests/output'])
+      const file = readFile('tests/output/test2.txt')
+      expect(file).toContain('MY_CUSTOM_PREFIX_TEST_VAR2: B')
+    })
+
     it('should replace all files in directory', () => {
       process.env['REACT_APP_INJECT_ENV3'] = 'C'
       buildFile()
@@ -138,15 +151,18 @@ describe('react-inject-env', () => {
       expect(readFile('tests/output3/env3.js')).toContain('"REACT_APP_SET_ENV1": "ENV1"')
     })
     it('should generate env file based on dotenv variables', () => {
+      shell.exec('echo REACT_APP_SET_ENV2 = C > .env')
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env4.js'])
       expect(readFile('tests/output3/env4.js')).toContain('"REACT_APP_SET_ENV2": "C"')
     })
-    it('should not pick up env variables not starting with REACT_APP', () => {
+    it('should not pick up env variables not starting with prefix', () => {
       process.env['SET_GENERIC_ENV'] = 'GENERIC_ENV'
+      process.env['MY_CUSTOM_PREFIX_TEST_VAR'] = 'MY_CUSTOM_PREFIX_TEST_VAR'
       const commandLine = new InjectEnvCommandLine()
-      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env5.js'])
+      commandLine.execute(['set', '-p', 'MY_CUSTOM_PREFIX_', '-d', './tests/output3', '-n', 'env5.js'])
       expect(readFile('tests/output3/env5.js')).not.toContain('"SET_GENERIC_ENV": "GENERIC_ENV"')
+      expect(readFile('tests/output3/env5.js')).toContain('"MY_CUSTOM_PREFIX_TEST_VAR": "MY_CUSTOM_PREFIX_TEST_VAR"')
     })
     it('should rename window variable name based on param', () => {
       const commandLine = new InjectEnvCommandLine()

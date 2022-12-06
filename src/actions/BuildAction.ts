@@ -2,8 +2,8 @@ import {
   CommandLineAction,
   CommandLineChoiceParameter,
   CommandLineRemainder,
-  CommandLineStringListParameter
-} from '@rushstack/ts-command-line'
+  CommandLineStringListParameter, CommandLineStringParameter
+} from "@rushstack/ts-command-line";
 import { retrieveDotEnvCfg, retrieveReactEnvCfg } from '../utils/Utils'
 import shell from 'shelljs'
 import { Obj } from '@aelesia/commons'
@@ -26,25 +26,19 @@ export class BuildAction extends CommandLineAction {
     return this._bypassEnvVar.values as string[]
   }
 
+  private _envVariablePrefix!: CommandLineStringParameter
+  get envVariablePrefix(): string {
+    // --prefix has a default value of 'REACT_APP_'
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._envVariablePrefix.value!
+  }
+
   public constructor() {
     super({
       actionName: 'build',
       summary: 'Build your react app with placeholder variables',
       documentation: 'TODO'
     })
-  }
-
-  protected async onExecute(): Promise<void> {
-    const dotEnvCfg = this.dotEnvEnabled ? retrieveDotEnvCfg() : {}
-    const env = { ...dotEnvCfg, ...retrieveReactEnvCfg() }
-    console.info('Building with the following variables', Obj.pick(env, this.bypassEnvVar))
-
-    const filteredEnv = Obj.omit(env, this.bypassEnvVar)
-    console.info('Replacing the following variables with placeholders', Object.keys(filteredEnv))
-
-    const command = `${formatEnvToCliString(filteredEnv)} ${this.userCommand}`
-    console.info('Executing script', `'${this.userCommand}'`)
-    shell.exec(command)
   }
 
   protected onDefineParameters(): void {
@@ -63,8 +57,30 @@ export class BuildAction extends CommandLineAction {
       argumentName: 'ENV_VARIABLE_NAME'
     })
 
+    this._envVariablePrefix = this.defineStringParameter({
+      description: 'Specify the prefix of environment variables to load',
+      parameterLongName: '--prefix',
+      parameterShortName: '-p',
+      argumentName: 'ENV_VAR_PREFIX',
+      defaultValue: 'REACT_APP_',
+      required: false,
+    })
+
     this._userCommand = this.defineCommandLineRemainder({
       description: 'Enter your build command here (eg. `react-inject-env build npm run build`)'
     })
+  }
+
+  protected async onExecute(): Promise<void> {
+    const dotEnvCfg = this.dotEnvEnabled ? retrieveDotEnvCfg(this.envVariablePrefix) : {}
+    const env = { ...dotEnvCfg, ...retrieveReactEnvCfg(this.envVariablePrefix) }
+    console.info('Building with the following variables', Obj.pick(env, this.bypassEnvVar))
+
+    const filteredEnv = Obj.omit(env, this.bypassEnvVar)
+    console.info('Replacing the following variables with placeholders', Object.keys(filteredEnv))
+
+    const command = `${formatEnvToCliString(filteredEnv)} ${this.userCommand}`
+    console.info('Executing script', `'${this.userCommand}'`)
+    shell.exec(command)
   }
 }
