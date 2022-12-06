@@ -41,8 +41,8 @@ jobs:
 
       - run: yarn install
 
-      - run: npm config set '//registry.npmjs.org/:_authToken' "${NPMJS_TOKEN}"
+      - run: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
 
       - run: npm publish --access public
         env:
-          NPMJS_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
