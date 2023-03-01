@@ -76,6 +76,8 @@ set REACT_APP_COLOR=navy&& set REACT_APP_MAIN_TEXT=Navy Background&& npx react-i
 
 `.env` files are supported. `react-inject-env` will automatically detect environment variables in your `.env` file located in your root folder.
 
+If you want to customize the `.env` file name, you can define the file name in environment variable `REACT_APP_DOTENV_CONFIG_PATH`.
+
 Note: Environment variables passed in through the command line will take precedence over `.env` variables.
 
 ## Typescript
