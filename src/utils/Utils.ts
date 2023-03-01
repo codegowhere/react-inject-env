@@ -17,7 +17,8 @@ export function retrieveReactEnvCfg(): Record<string, string> {
 
 export function retrieveDotEnvCfg(): Record<string, string> {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const env = require('dotenv').config().parsed ?? {}
+  const path = process.env.REACT_APP_DOTENV_CONFIG_PATH ?? '.env';
+  const env = require('dotenv').config({path: path}).parsed ?? {}
 
   const keys = Object.keys(env)
   const reactKeys = keys.filter(key => {
