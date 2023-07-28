@@ -4,7 +4,7 @@ export function retrieveReactEnvCfg(): Record<string, string> {
   const env = process.env
   const keys = Object.keys(env)
   const reactKeys = keys.filter(key => {
-    return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
+    return key.startsWith(Cfg.PREFIX) || key.startsWith(Cfg.VITE_PREFIX) || key === 'PUBLIC_URL'
   })
 
   const envCfg: Record<string, string> = {}
@@ -21,7 +21,7 @@ export function retrieveDotEnvCfg(): Record<string, string> {
 
   const keys = Object.keys(env)
   const reactKeys = keys.filter(key => {
-    return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
+    return key.startsWith(Cfg.PREFIX) || key.startsWith(Cfg.VITE_PREFIX) || key === 'PUBLIC_URL'
   })
 
   const envCfg: Record<string, string> = {}
